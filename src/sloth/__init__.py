@@ -1,3 +1,5 @@
+import numpy as np
+
 class dataframe:
     def __init__(self, data, index=None, columns=None): #"dunder init" = double underscore init
         self._data = data
