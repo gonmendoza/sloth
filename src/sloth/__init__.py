@@ -34,25 +34,85 @@ class dataframe:
     def columns(self):
         return self._columns
     def dtype(self):
+        """
+        Returns the type of the data.
+       
+        Parameters
+        ----------
+       
+        """
         return self._dtype
     def __repr__(self):
+        """
+        Returns the "official" string representation of an object.
+       
+        Parameters
+        ----------
+       
+        """
         return f"[{self._data}]"
     def __len__(self):
+        """
+        Returns the length of the object
+       
+        Parameters
+        ----------
+       
+        """
         return len(self.index)
     def __getitem__(self,item):
+        """
+        Returns the dictionary value of the item
+       
+        Parameters
+        ----------
+        item : single label
+        
+        """
         return self._data[item]
     def __iter__(self):
+        """
+        To go through all the columns one by one .
+       
+        Parameters
+        ----------
+        
+        """
         self.n = 0
         return iter(self._columns)
     def __next__(self):
+         """
+        Returns the the next column.
+       
+        Parameters
+        ----------
+        
+        """
         self.n += 1
         return next(iter(self._columns))
     def showrow(self, rowsee):
+        """
+        Returns the given row
+       
+        Parameters
+        ----------
+        rowsee : single label
+    
+        """
         xrow = []
         for col in self._data.keys():
             xrow.append(self._data[col][rowsee])
         return f"Row nº{rowsee}: {xrow}"
     def __setitem__(self, idx, value):
+        """
+        Returns a value for a specified index 
+       
+        Parameters
+        ----------
+        idx : single label
+        value: single value
+        
+        """
         if type(value) == type(1):
             newarr = []
             for number in self.index:
@@ -81,6 +141,7 @@ class dataframe:
         Parameters
         ----------
         Columns : single label
+        
         """
         if column is None:
             sumlist = []
