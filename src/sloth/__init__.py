@@ -231,3 +231,47 @@ class dataframe:
             else:
                 result = sortedcol[int((len(self.index)/2)-0.5)]
             return result
+ #MAX
+
+   def max(self):
+        """ Returns a list of dictionary’s with the max value of numeric columns"""
+  
+        max_list = []
+        max_dictionary = dict()
+
+        # Iterate over all the columns
+        for key in self.keys:
+        
+        # Check if the column contains numeric values
+           
+         if all(
+                isinstance(x, (int, float, np.int_, np.float_)) for x in self.data[key]
+            ):
+                max_dictionary[key] = np.max(self.data[key])
+            else:
+                # Ignore if not numeric
+
+        max_list.append(max_dictionary)
+   
+
+#MIN
+
+def min(self):
+        """ Returns a list of dictionary’s with the min value of numeric columns"""
+        
+        min_list = []
+        min_dictionary = dict()
+
+        # Iterate over all the columns
+        for key in self.keys:
+        
+        # Check if the column contains numeric values
+           
+        if all(
+                isinstance(x, (int, float, np.int_, np.float_)) for x in self.data[key]
+            ):
+                min_dictionary[key] = np.min(self.data[key])
+            else:
+                # Ignore if not numeric
+
+        min_list.append(min_dictionary)
