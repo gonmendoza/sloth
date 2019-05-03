@@ -1,18 +1,20 @@
 import numpy as np
 
 class dataframe:
-    def __init__(self, data, index=None, columns=None, dtype=None): #"dunder init" = double underscore init
-        for colname in data.keys():
-            data[colname] = np.array(data[colname])
+    def __init__(self, data, index=None, columns=None, dtype=None):
+        if type(data) != dict:
+            raise TypeError("Naaay, only dictionaries if it please ma'lord")
+        for key in data.keys():
+            data[key] = np.array(data[key])
         self._data = data
         if index is None:
-            for colname in data.keys():
-                last = len(data[colname])
+            for key in data.keys():
+                last = len(data[key])
                 for colname in data.keys():
-                    if len(data[colname]) != last:
+                    if len (data[key]) != last:
                         raise ValueError("FOOL! Your arrays must have the same size")
                     else:
-                        self._index = np.array(range(len(data[colname])))
+                        self._index = np.array(range(len(data[key])))
         else:
             self._index = index
         if columns is None:
@@ -20,19 +22,22 @@ class dataframe:
         else:
             self._columns = columns
         coltypes = []
-        for colname in data.keys():
-            coltypes.append(f"{colname}: {type(data[colname][0])}")
+        for key in data.keys():
+            coltypes.append(f"{key}: {type(data[key][0])}")
         self._dtype = coltypes
     
-    @property
+   @property
     def data(self):
         return self._data
+
     @property
     def index(self):
         return self._index
+
     @property
     def columns(self):
         return self._columns
+
     def dtype(self):
         """
         Returns the type of the data.
@@ -42,37 +47,31 @@ class dataframe:
        
         """
         return self._dtype
-    def __repr__(self):
+
+    def _repr_(self):
         """
         Returns the "official" string representation of an object.
        
-        Parameters
-        ----------
-       
         """
         return f"[{self._data}]"
-    def __len__(self):
+
+    def _len_(self):
         """
         Returns the length of the object
        
-        Parameters
-        ----------
-       
         """
         return len(self.index)
-    def __getitem__(self,item):
+
+    def _getitem_(self, item):
         """
-        Returns the dictionary value of the item
-       
-        Parameters
-        ----------
-        item : single label
+        Allowes us to index the columns by name
         
         """
         return self._data[item]
-    def __iter__(self):
+
+    def _iter_(self):
         """
-        To go through all the columns one by one .
+        Iterate through the column names
        
         Parameters
         ----------
@@ -80,16 +79,15 @@ class dataframe:
         """
         self.n = 0
         return iter(self._columns)
-    def __next__(self):
-         """
-        Returns the the next column.
-       
-        Parameters
-        ----------
+
+    def _next_(self):
+        """
+        Returns the the next element.
         
         """
         self.n += 1
         return next(iter(self._columns))
+        
     def showrow(self, rowsee):
         """
         Returns the given row
@@ -103,7 +101,8 @@ class dataframe:
         for col in self._data.keys():
             xrow.append(self._data[col][rowsee])
         return f"Row nº{rowsee}: {xrow}"
-    def __setitem__(self, idx, value):
+
+    def _setitem_(self, idx, value):
         """
         Returns a value for a specified index 
        
@@ -131,9 +130,11 @@ class dataframe:
         elif len(value) == len(self.index):
             self.data[idx] = np.array(value)
         else:
-            raise ValueError("FOOL! Length of values does not match length of index, stop trying to brake my DF!")
+            raise ValueError(
+                "Hi! Length of values does not match length of index, stop trying to brake my DF!"
+            )
     
-    def sum(self, column = None):
+    def sum(self, column=None):
         """
         Returns sum of each column or a single columns if a specified column argument is
         passed
@@ -151,19 +152,20 @@ class dataframe:
                     for number in range(len(self.index)):
                         result += self._data[key][number]
                     sumlist.append(result)
-                elif type(self._data[key][0]) == type(np.array([1.0])[0]): 
+                elif type(self._data[key][0]) == type(np.array([1.0])[0]):
                     for number in range(len(self.index)):
                         result += self._data[key][number]
                     sumlist.append(result)
                 else:
                     sumlist.append("String col")
             return sumlist
-        else:
+         else:
             result = 0
             for number in range(len(self.index)):
                 result += self._data[column][number]
             return result
-    def mean(self, column = None):
+
+     def mean(self, column=None):
         """
         Returns mean of each column or a single columns if a specified column argument is
         passed
@@ -178,11 +180,11 @@ class dataframe:
                 result = 0
                 if type(self._data[key][0]) == type(np.array([1])[0]):
                     for number in range(len(self.index)):
-                        result += self._data[key][number]/len(self.index)
+                        result += self._data[key][number] / len(self.index)
                     meanlist.append(result)
-                elif type(self._data[key][0]) == type(np.array([1.0])[0]): 
+                elif type(self._data[key][0]) == type(np.array([1.0])[0]):
                     for number in range(len(self.index)):
-                        result += self._data[key][number]/len(self.index)
+                        result += self._data[key][number] / len(self.index)
                     meanlist.append(result)
                 else:
                     meanlist.append("String col")
@@ -190,9 +192,10 @@ class dataframe:
         else:
             result = 0
             for number in range(len(self.index)):
-                result += self._data[column][number]/len(self.index)
+                result += self._data[column][number] / len(self.index)
             return result
-    def median(self, column = None):
+
+    def median(self, column=None):
         """
         Returns median of each column or a single columns if a specified column argument is
         passed
@@ -209,15 +212,21 @@ class dataframe:
                 result = 0
                 if type(self._data[key][0]) == type(np.array([1])[0]):
                     if len(self.index) % 2 == 0:
-                        result = (sortedcol[len(self.index)/2] + sortedcol[(len(self.index)/2)-1])/2
+                        result = (
+                            sortedcol[len(self.index) / 2]
+                            + sortedcol[(len(self.index) / 2) - 1]
+                        ) / 2
                     else:
-                        result = sortedcol[int((len(self.index)/2)-0.5)]
+                        result = sortedcol[int((len(self.index) / 2) - 0.5)]
                     medianlist.append(result)
-                elif type(self._data[key][0]) == type(np.array([1.0])[0]): 
+                elif type(self._data[key][0]) == type(np.array([1.0])[0]):
                     if len(self.index) % 2 == 0:
-                        result = (sortedcol[len(self.index)/2] + sortedcol[(len(self.index)/2)-1])/2
+                        result = (
+                            sortedcol[len(self.index) / 2]
+                            + sortedcol[(len(self.index) / 2) - 1]
+                        ) / 2
                     else:
-                        result = sortedcol[int((len(self.index)/2)-0.5)]
+                        result = sortedcol[int((len(self.index) / 2) - 0.5)]
                     medianlist.append(result)
                 else:
                     medianlist.append("String col")
@@ -227,51 +236,50 @@ class dataframe:
             sortedcol.sort()
             result = 0
             if len(self.index) % 2 == 0:
-                result = (sortedcol[len(self.index)/2] + sortedcol[(len(self.index)/2)-1])/2
+                result = (
+                    sortedcol[len(self.index) / 2]
+                    + sortedcol[(len(self.index) / 2) - 1]
+                ) / 2
             else:
-                result = sortedcol[int((len(self.index)/2)-0.5)]
+                result = sortedcol[int((len(self.index) / 2) - 0.5)]
             return result
- #MAX
-
-   def max(self):
-        """ Returns a list of dictionary’s with the max value of numeric columns"""
-  
-        max_list = []
-        max_dictionary = dict()
-
-        # Iterate over all the columns
-        for key in self.keys:
+    
+    def max(self, column=None):
+        """ Returns a list of dictionary’s with the max value of the columns or
+        the specific column if so called
         
-        # Check if the column contains numeric values
-           
-         if all(
-                isinstance(x, (int, float, np.int_, np.float_)) for x in self.data[key]
-            ):
-                max_dictionary[key] = np.max(self.data[key])
-            else:
-                # Ignore if not numeric
+        Parameters
+        ----------
+        Columns : single label
+        """
 
-        max_list.append(max_dictionary)
-   
-
-#MIN
-
-def min(self):
-        """ Returns a list of dictionary’s with the min value of numeric columns"""
+        if column is None:
+            maxlist = []
+            for key in self._data.keys():
+                result = max(self._data[key])
+                maxlist.append(result)
+            return maxlist
+        else:
+            result = max(self._data[column])
+            return result
+    
+    def min(self, column=None):
+        """ Returns a list of dictionary’s with the min value of the columns or
+        the specific column if so called
         
-        min_list = []
-        min_dictionary = dict()
+        Parameters
+        ----------
+        Columns : single label
+        """
 
-        # Iterate over all the columns
-        for key in self.keys:
-        
-        # Check if the column contains numeric values
-           
-        if all(
-                isinstance(x, (int, float, np.int_, np.float_)) for x in self.data[key]
-            ):
-                min_dictionary[key] = np.min(self.data[key])
-            else:
-                # Ignore if not numeric
-
-        min_list.append(min_dictionary)
+        if column is None:
+            minlist = []
+            for key in self._data.keys():
+                result = min(self._data[key])
+                minlist.append(result)
+            return minlist
+        else:
+            sortedcol = self._data[column]
+            sortedcol.sort()
+            result = min(self._data[column])
+            return result
