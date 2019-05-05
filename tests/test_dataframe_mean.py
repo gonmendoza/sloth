@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from sloth import dataframe
+import sloth
 
 test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'num_legs': [2, 4, 8, 0, 4],
@@ -10,8 +10,8 @@ test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'mammal': [False, True, False, False, True]}
 
 # Check the function mean returns the expected list of values
-def check_df_mean():
-    test_df = dataframe(test_data)
+def test_df_mean():
+    test_df = sloth.dataframe(test_data)
     mean_list = test_df.mean()
-    expected_mean_list = ['String col', 3.6000000000000005, 0.4, 4.2, -0.16750599999999993, 'String col']
+    expected_mean_list = ['String col', 3.6, 0.4, 6.0, -0.11225959999999997, 'String col']
     assert mean_list == expected_mean_list

@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from sloth import dataframe
+import sloth
 
 test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'num_legs': [2, 4, 8, 0, 4],
@@ -10,8 +10,8 @@ test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'mammal': [False, True, False, False, True]}
 
 # Check the function max returns the expected list of values
-def check_df_max():
-    test_df = dataframe(test_data)
+def test_df_max():
+    test_df = sloth.dataframe(test_data)
     max_list = test_df.max()
-    expected_max_list = ['monkey', 8, 2, 9, 1.047249, False]
+    expected_max_list = ['spider', 8, 2, 10, 1.047249, True]
     assert max_list == expected_max_list
