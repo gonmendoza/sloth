@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from sloth import dataframe
+import sloth
 
 test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'num_legs': [2, 4, 8, 0, 4],
@@ -10,8 +10,8 @@ test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'mammal': [False, True, False, False, True]}
 
 # Check the function median returns the expected list of values
-def check_df_median():
-    test_df = dataframe(test_data)
+def test_df_median():
+    test_df = sloth.dataframe(test_data)
     median_list = test_df.median()
-    expected_median_list = ['String col', 4, 0, 2, 0.0, 'String col']
+    expected_median_list = ['String col', 4, 0, 8, 0.119209, 'String col']
     assert median_list == expected_median_list

@@ -5,9 +5,9 @@ class dataframe:
     def __init__(self, data, index=None, columns=None, dtype=None):
         if type(data) != dict:
             raise TypeError("Naaay, only dictionaries if it please ma'lord")
-        for key in data.keys():
-            data[key] = np.array(data[key])
-        self._data = data
+        self._data = data.copy()
+        for key in self._data.keys():
+            self._data[key] = np.array(self._data[key])
         if index is None:
             for key in data.keys():
                 last = len(data[key])
@@ -178,20 +178,20 @@ class dataframe:
                 result = 0
                 if type(self._data[key][0]) == type(np.array([1])[0]):
                     for number in range(len(self.index)):
-                        result += self._data[key][number] / len(self.index)
-                    meanlist.append(result)
+                        result += self._data[key][number]
+                    meanlist.append(result / len(self.index))
                 elif type(self._data[key][0]) == type(np.array([1.0])[0]):
                     for number in range(len(self.index)):
-                        result += self._data[key][number] / len(self.index)
-                    meanlist.append(result)
+                        result += self._data[key][number]
+                    meanlist.append(result / len(self.index))
                 else:
                     meanlist.append("String col")
             return meanlist
         else:
             result = 0
             for number in range(len(self.index)):
-                result += self._data[column][number] / len(self.index)
-            return result
+                result += self._data[column][number]
+            return result / len(self.index)
 
     def median(self, column=None):
         """
@@ -205,7 +205,7 @@ class dataframe:
         if column is None:
             medianlist = []
             for key in self._data.keys():
-                sortedcol = self._data[key]
+                sortedcol = self._data[key].copy()
                 sortedcol.sort()
                 result = 0
                 if type(self._data[key][0]) == type(np.array([1])[0]):
@@ -230,7 +230,7 @@ class dataframe:
                     medianlist.append("String col")
             return medianlist
         else:
-            sortedcol = self._data[column]
+            sortedcol = self._data[column].copy()
             sortedcol.sort()
             result = 0
             if len(self.index) % 2 == 0:

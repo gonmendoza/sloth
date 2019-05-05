@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from sloth import dataframe
+import sloth
 
 test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'num_legs': [2, 4, 8, 0, 4],
@@ -10,8 +10,8 @@ test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'mammal': [False, True, False, False, True]}
         
 # Check the function df.colums returns the expected list of column names
-def check_df_columns():
-    test_df = dataframe(test_data)
+def test_df_columns():
+    test_df = sloth.dataframe(test_data)
     col_list = list(test_df.columns)
     expect_col_list = ['species','num_legs','num_wings','num_specimen_seen','statistics','mammal']
     assert col_list == expect_col_list

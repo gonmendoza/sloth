@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from sloth import dataframe
+import sloth
 
 test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'num_legs': [2, 4, 8, 0, 4],
@@ -10,8 +10,8 @@ test_data = {'species':['falcon', 'dog', 'spider', 'fish', 'cat'],
                 'mammal': [False, True, False, False, True]}
 
 # Check the function min returns the expected list of values
-def check_df_min():
-    test_df = dataframe(test_data)
+def test_df_min():
+    test_df = sloth.dataframe(test_data)
     min_list = test_df.min()
     expected_min_list = ['cat', 0, 0, 1, -1.509059, False]
     assert min_list == expected_min_list
