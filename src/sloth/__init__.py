@@ -2,7 +2,7 @@ import numpy as np
 
 
 class dataframe:
-    def _init_(self, data, index=None, columns=None, dtype=None):
+    def __init__(self, data, index=None, columns=None, dtype=None):
         if type(data) != dict:
             raise TypeError("Naaay, only dictionaries if it please ma'lord")
         for key in data.keys():
@@ -46,28 +46,28 @@ class dataframe:
         """
         return self._dtype
 
-    def _repr_(self):
+    def __repr__(self):
         """
         Returns the "official" string representation of an object.
        
         """
         return f"[{self._data}]"
 
-    def _len_(self):
+    def __len__(self):
         """
         Returns the length of the object
        
         """
         return len(self.index)
 
-    def _getitem_(self, item):
+    def __getitem__(self, item):
         """
         Allowes us to index the columns by name
         
         """
         return self._data[item]
 
-    def _iter_(self):
+    def __iter__(self):
         """
         Iterate through the column names
        
@@ -78,7 +78,7 @@ class dataframe:
         self.n = 0
         return iter(self._columns)
 
-    def _next_(self):
+    def __next__(self):
         """
         Returns the the next element.
         
@@ -100,7 +100,7 @@ class dataframe:
             xrow.append(self._data[col][rowsee])
         return xrow
 
-    def _setitem_(self, column, value):
+    def __setitem__(self, column, value):
         """
         Returns a value for a specified index 
        
