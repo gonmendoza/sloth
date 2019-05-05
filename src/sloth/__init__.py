@@ -1,7 +1,8 @@
 import numpy as np
 
+
 class dataframe:
-    def __init__(self, data, index=None, columns=None, dtype=None):
+    def _init_(self, data, index=None, columns=None, dtype=None):
         if type(data) != dict:
             raise TypeError("Naaay, only dictionaries if it please ma'lord")
         for key in data.keys():
@@ -10,8 +11,8 @@ class dataframe:
         if index is None:
             for key in data.keys():
                 last = len(data[key])
-                for colname in data.keys():
-                    if len (data[key]) != last:
+                for key in data.keys():
+                    if len(data[key]) != last:
                         raise ValueError("FOOL! Your arrays must have the same size")
                     else:
                         self._index = np.array(range(len(data[key])))
@@ -25,8 +26,8 @@ class dataframe:
         for key in data.keys():
             coltypes.append(f"{key}: {type(data[key][0])}")
         self._dtype = coltypes
-    
-   @property
+
+    @property
     def data(self):
         return self._data
 
@@ -41,9 +42,6 @@ class dataframe:
     def dtype(self):
         """
         Returns the type of the data.
-       
-        Parameters
-        ----------
        
         """
         return self._dtype
@@ -87,7 +85,7 @@ class dataframe:
         """
         self.n += 1
         return next(iter(self._columns))
-        
+
     def showrow(self, rowsee):
         """
         Returns the given row
@@ -100,40 +98,40 @@ class dataframe:
         xrow = []
         for col in self._data.keys():
             xrow.append(self._data[col][rowsee])
-        return f"Row nº{rowsee}: {xrow}"
+        return xrow
 
-    def _setitem_(self, idx, value):
+    def _setitem_(self, column, value):
         """
         Returns a value for a specified index 
        
         Parameters
         ----------
-        idx : single label
-        value: single value
+        column : single label
+        value: single value or same size array
         
         """
         if type(value) == type(1):
             newarr = []
             for number in self.index:
                 newarr.append(value)
-            self.data[idx] = np.array(newarr)
+            self.data[column] = np.array(newarr)
         elif type(value) == type(1.0):
             newarr = []
             for number in self.index:
                 newarr.append(value)
-            self.data[idx] = np.array(newarr)
+            self.data[column] = np.array(newarr)
         elif type(value) == type("a"):
             newarr = []
             for number in self.index:
                 newarr.append(value)
-            self.data[idx] = np.array(newarr)
+            self.data[column] = np.array(newarr)
         elif len(value) == len(self.index):
-            self.data[idx] = np.array(value)
+            self.data[column] = np.array(value)
         else:
             raise ValueError(
                 "Hi! Length of values does not match length of index, stop trying to brake my DF!"
             )
-    
+
     def sum(self, column=None):
         """
         Returns sum of each column or a single columns if a specified column argument is
@@ -159,13 +157,13 @@ class dataframe:
                 else:
                     sumlist.append("String col")
             return sumlist
-         else:
+        else:
             result = 0
             for number in range(len(self.index)):
                 result += self._data[column][number]
             return result
 
-     def mean(self, column=None):
+    def mean(self, column=None):
         """
         Returns mean of each column or a single columns if a specified column argument is
         passed
@@ -243,10 +241,11 @@ class dataframe:
             else:
                 result = sortedcol[int((len(self.index) / 2) - 0.5)]
             return result
-    
+
     def max(self, column=None):
-        """ Returns a list of dictionary’s with the max value of the columns or
-        the specific column if so called
+        """ Returns a list with the max value of the columns or
+        a single column if a specified column argument is
+        passed
         
         Parameters
         ----------
@@ -262,10 +261,11 @@ class dataframe:
         else:
             result = max(self._data[column])
             return result
-    
+
     def min(self, column=None):
-        """ Returns a list of dictionary’s with the min value of the columns or
-        the specific column if so called
+        """ Returns a list with the min value of the columns or
+        a single column if a specified column argument is
+        passed
         
         Parameters
         ----------
@@ -279,7 +279,33 @@ class dataframe:
                 minlist.append(result)
             return minlist
         else:
-            sortedcol = self._data[column]
-            sortedcol.sort()
             result = min(self._data[column])
             return result
+
+    @property
+    def slothlove(self):
+        from IPython.display import display, Image
+
+        display(
+            Image(
+                url="https://static01.nyt.com/images/2014/01/28/science/28SLOT_SPAN/28SLOT-"
+                "superJumbo.jpg?quality=90&auto=webp"
+            )
+        )
+
+    @property
+    def nopandas(self):
+        from IPython.display import display, Image
+
+        display(
+            Image(
+                url="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/"
+                "edce50f2-47c4-4c11-8e2c-dd04a4d20fd8/d3a6q3w-d76b3ff1-0306-457c-82ca-"
+                "3398cbd4f0a1.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm"
+                "46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OT"
+                "gyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2VkY2U1MGYyLTQ3YzQtNGM"
+                "xMS04ZTJjLWRkMDRhNGQyMGZkOFwvZDNhNnEzdy1kNzZiM2ZmMS0wMzA2LTQ1N2MtODJjYS0zMzk4Y2JkNGYwYT"
+                "EuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.z_P43Iptf4qIxGFkfiwT6IBq-c"
+                "SKQxxywsfFwz23_iA"
+            )
+        )
